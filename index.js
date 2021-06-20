@@ -51,12 +51,10 @@ const draw = async () => {
     );
 
     log(chalk.cyan('  🔑 登入中...'));
-    // eslint-disable-next-line no-await-in-loop
     const accessToken = (await user.getToken(account, password))
       .body.results.member_info.access_token;
 
     log(chalk.cyan('  🃏 抽卡中...'));
-    // eslint-disable-next-line no-await-in-loop
     const results = (await lottery.getLottery(accessToken))
       ?.body?.results;
 
