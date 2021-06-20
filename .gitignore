@@ -3,3 +3,5 @@ node_modules
 coverage
 err.log
 out.log
+
+draw.sh
