@@ -3,7 +3,7 @@ const { hideBin } = require('yargs/helpers');
 const { Table } = require('console-table-printer');
 const chalk = require('chalk');
 
-const user = require('./models/user.js');
+const user = require('./models/user');
 const lottery = require('./models/lottery');
 
 const { log } = console;
