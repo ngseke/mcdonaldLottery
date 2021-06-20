@@ -2,6 +2,8 @@ const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
 const { Table } = require('console-table-printer');
 const chalk = require('chalk');
+const notifier = require('node-notifier');
+const path = require('path');
 
 const user = require('./models/user');
 const lottery = require('./models/lottery');
@@ -45,6 +47,7 @@ const draw = async () => {
       { name: 'result', title: '結果', alignment: 'left' },
     ],
   });
+  const notifications = [];
 
   for (let index = 0; index < users.length; index += 1) {
     const { account, password } = users[index];
@@ -75,17 +78,29 @@ const draw = async () => {
         drawn: { color: 'blue', result: `🔵 ${couponTitle}` },
       }[type];
 
-      table.addRow({ ...defaultData, result }, { color });
+      table.addRow({ ...defaultData, type, result }, { color });
+      notifications.push({ ...defaultData, type, result });
     } catch (e) {
+      const failedMessage = '🔺 獲取失敗，請再試一次';
+      const type = 'failed';
       table.addRow(
-        { ...defaultData, result: '🔺 獲取失敗，請再試一次' },
+        { ...defaultData, type, result: failedMessage },
         { color: 'red' },
       );
+      notifications.push({ ...defaultData, type, result: failedMessage });
     }
+
     log();
   }
 
   table.printTable();
+  notifier.notify({
+    title: 'My notification',
+    message: notifications
+      .map(({ account, result }) => `${account} ${result}`)
+      .join('\n'),
+    contentImage: path.join(__dirname, 'hamburger.png'),
+  });
 };
 
 draw();
