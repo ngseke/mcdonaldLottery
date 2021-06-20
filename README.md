@@ -3,11 +3,15 @@
 Easy to get the mcdonald lottery daily api.
 
 ## Installation
+
 ```
+git clone https://github.com/ngseke/mcdonaldLottery.git
+cd mcdonaldLottery
+cp .envExample .env
 npm install
 ```
 
-## Usage (透過命令列手動執行抽卡)
+## Usage (透過命令列手動執行)
 
 單個帳號
 
@@ -22,6 +26,9 @@ npm run draw -- \
   --user \
     <帳號1>,<密碼1> <帳號2>,<密碼2> # 以空格分隔多組帳號
 ```
+
+<details>
+  <summary>Usage (Server)</summary>
 
 ## Usage (Server)
 ```
@@ -76,3 +83,5 @@ curl --request POST \
 	"cronFormat": "<cronFormat>"
 }'
 ```
+
+</details>
