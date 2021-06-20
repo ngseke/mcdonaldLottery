@@ -18,23 +18,26 @@ const getType = (object) => {
   return 'failed';
 };
 
-const draw = async () => {
+/** 解析帳號密碼參數 */
+const getUsersFromArgv = () => {
   const { user: userStrings } = yargs(hideBin(process.argv))
     .array('user').argv;
 
   if (!userStrings) throw new Error('缺少參數 `--user`!');
 
-  // 解析帳號密碼參數
-  const users = userStrings.map((string) => {
+  return userStrings.map((string) => {
     try {
       const [account, password] = string.split(',');
       if (!(account && password)) throw new Error();
-
       return { account, password };
     } catch (e) {
       throw new Error('`--user` 的各組參數應以逗號分隔帳號和密碼！');
     }
   });
+};
+
+const draw = async () => {
+  const users = getUsersFromArgv();
 
   const table = new Table({
     columns: [
