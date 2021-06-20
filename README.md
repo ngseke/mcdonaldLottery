@@ -7,7 +7,23 @@ Easy to get the mcdonald lottery daily api.
 npm install
 ```
 
-## Usage
+## Usage (透過命令列手動執行抽卡)
+
+單個帳號
+
+```bash
+npm run draw -- --user <帳號>,<密碼> # 以逗點分隔帳號和密碼
+```
+
+多組帳號
+
+```bash
+npm run draw -- \
+  --user \
+    <帳號1>,<密碼1> <帳號2>,<密碼2> # 以空格分隔多組帳號
+```
+
+## Usage (Server)
 ```
 npm run start
 ```
@@ -39,14 +55,14 @@ curl --request POST \
 ```
 
 #### Get lottery status
-Get the lottery list and stickers witch the date is not expired. 
+Get the lottery list and stickers witch the date is not expired.
 ![](https://i.imgur.com/QSxerRE.png)
 ```
 curl --request GET \
   --url 'http://localhost:5000/api/lottery?accessToken=<mcdonaldToken>'
 ```
 
-#### Auto get lottery 
+#### Auto get lottery
 Get the lottery daily , cronFormat default is UTF+8 00:01:00
 ![](https://i.imgur.com/7hVzp86.png)
 ![](https://i.imgur.com/2BD9J8e.png)
@@ -60,4 +76,3 @@ curl --request POST \
 	"cronFormat": "<cronFormat>"
 }'
 ```
-
