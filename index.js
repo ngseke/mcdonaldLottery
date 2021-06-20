@@ -8,6 +8,16 @@ const lottery = require('./models/lottery');
 
 const { log } = console;
 
+const getType = (object) => {
+  const keys = Object.keys(object);
+  if (keys.includes('sticker')) return 'sticker';
+  if (keys.includes('coupon')) {
+    if (/已領過/g.test(object?.coupon?.object_info?.title)) return 'drawn';
+    return 'coupon';
+  }
+  return 'failed';
+};
+
 const draw = async () => {
   const { user: userStrings } = yargs(hideBin(process.argv))
     .array('user').argv;
@@ -52,23 +62,22 @@ const draw = async () => {
 
     const defaultData = { account };
 
-    if (results) {
-      const title = results?.coupon?.object_info?.title;
-      const hasWon = Boolean(title);
+    try {
+      const type = getType(results);
+      if (!results || type === 'failed') throw new Error('');
 
+      const couponTitle = results?.coupon?.object_info?.title;
+
+      const { result, color } = {
+        sticker: { color: 'yellow', result: '🟡 歡樂貼' },
+        coupon: { color: 'green', result: `🟢 ${couponTitle}` },
+        drawn: { color: 'blue', result: `🔵 ${couponTitle}` },
+      }[type];
+
+      table.addRow({ ...defaultData, result }, { color });
+    } catch (e) {
       table.addRow(
-        {
-          ...defaultData,
-          result: (hasWon) ? `🔵 ${title}` : '🟡 歡樂貼',
-        },
-        { color: (hasWon) ? 'blue' : 'yellow' },
-      );
-    } else {
-      table.addRow(
-        {
-          ...defaultData,
-          result: '🔺 獲取失敗',
-        },
+        { ...defaultData, result: '🔺 獲取失敗，請再試一次' },
         { color: 'red' },
       );
     }
